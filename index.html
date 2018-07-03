@@ -5,28 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Singular to Plural</title>
-    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div id="toolbar"></div>
+    <div id="toolbar">
+        <h1>MyStop</h1>
+        <a href="#" id="toSh">How you can help?</a>
+    </div>
     <div id="all">
     <div id="ins">
     <label for="sing" id="lblSing">Your noun here:</label>
-        <input type="text" name="sing" id="sing">
+        <input type="text" name="sing" id="sing" placeholder="Your Noun in Singular">
     </div>
     <div id="cv">
     <strong id="cs">
-        Converter to:
+        Converted to:
     </strong>
     <h1 id="ls">
-        Examples
+        Noun in Plural
     </h1>
 </div>
 </div>
-<a href="#" id="send" class="material-icons">
-    send
-</a>
+<div href="#" id="send">
+</div>
+<i class="material-icons sendS">arrow_forward</i>
+<div id="btns"></div>
+<a href="#" id="translate" class="material-icons">translate</a>
+
+<div id="shadow">
+    <img src="./assets/img/icon.png" alt="" id="logo">
+    <h1>
+        STOP
+        <strong>Singular to Plural</strong>
+    </h1>
+</div>
 </body>
-<script src="src/js/main.js"></script>
+<script src="./assets/js/main.js"></script>
+
 </html>

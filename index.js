@@ -1,14 +1,29 @@
 const {app, BrowserWindow} = require('electron')
-const fs = require('fs');
+const path = require('path');
 const {dialog} = require('electron')
 let win
 
 function createWindow(){
-    win = new BrowserWindow({width: 1000, height: 600,titleBarStyle: 'hiddenInset', frame : true, resizable: false,});
-    win.loadFile("src/index.html");
+    win = new BrowserWindow({
+        width: 1050, 
+        height: 650,
+        titleBarStyle: 'hiddenInset',
+        frame : true, 
+        resizable: false,
+        show : false,
+        icon: 'src/img/logo.icns',
+        title : "Stop"
+    });
+    
+    win.loadFile("index.html");
     win.on('closed',() => {
         win == null;
     })
+    win.once('ready-to-show', () => {
+        win.show()
+      })
+    
+
   
   //win.webContents.openDevTools();
 }

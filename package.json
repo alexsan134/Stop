@@ -1,15 +1,20 @@
 {
-  "name": "stop",
+  "name": "Stop",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "buildS" : "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "AlexSantos",
   "license": "MIT",
   "dependencies": {
+    "google-translate-api": "^2.3.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^12.1.0",
     "electron": "^2.0.3"
   }
 }
