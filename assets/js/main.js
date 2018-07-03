@@ -3,7 +3,6 @@
 //All rights reserved
 'use strict'
 const translate = require('google-translate-api');
-const {remote, BrowserWindow} = require('electron');
 document.querySelector(".sendS").addEventListener("click", send);
 document.querySelector("#sing").addEventListener("keyup", (event) =>{
     event.preventDefault();
@@ -300,20 +299,4 @@ function trans(){
     });
 }
 
-document.getElementById("toSh").addEventListener("click", modals);
-document.getElementById("send").addEventListener("click", closeM);
-let child;
-function modals(){
-    child = new remote.BrowserWindow({parent : remote.getCurrentWindow(), modal: true, show: false})
-      child.loadURL('https://github.com')
-      child.once('ready-to-show', () => {
-            child.show()
-      })
-      child.on('close', function (event) {
-        child.hide();
-        event.preventDefault();
-      })
-  }
-function closeM(){
-    child.close();
-}
+
