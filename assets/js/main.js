@@ -3,12 +3,14 @@
 //All rights reserved
 'use strict'
 const translate = require('google-translate-api');
-document.querySelector(".sendS").addEventListener("click", send);
-document.querySelector("#sing").addEventListener("keyup", (event) =>{
+var nodemailer = require('nodemailer');
+
+document.querySelector(".sendI").addEventListener("click", send);
+document.querySelector(".sing").addEventListener("keyup", (event) =>{
     event.preventDefault();
-    var inpt = document.querySelector("#sing").value;
+    var inpt = document.querySelector(".sing").value;
     inpt = inpt.replace(/[^A-Za-z]/g, '');
-    document.querySelector("#sing").value = inpt;
+    document.querySelector(".sing").value = inpt;
     if(event.keyCode == 13){
         send();
     }
@@ -21,9 +23,9 @@ setTimeout(() =>{
 }, 1800);
 
 function send(){
-    document.querySelector("#lblSing").innerHTML = "Your noun here:";
-    document.querySelector("#cs").innerHTML = "Converted to:";
-    var data = document.querySelector("#sing").value;
+    document.querySelector(".lblSing").innerHTML = "Your noun here:";
+    document.querySelector(".cs").innerHTML = "Converted to:";
+    var data = document.querySelector(".sing").value;
     intelIcons(data);
 }
 
@@ -32,24 +34,23 @@ function replaceAt(string, index, replace) {
 }
 
 function includeArray(str, array){
-    var resp;
+    var respTS = false;
     for(var e = 0; e < array.length;e++){
-      if(str == array[e]){
-        resp = true;
-        return resp;
-        }else{
-        resp = false;
-        return resp;
+        if(str == array[e]){
+            respTS = true;
+            break;
         }
     }
+    return respTS;
 }
+
 
 function intelIcons(name){
     var toAdd;
     var icon = document.createElement("i");
     var ic = name.toLowerCase();
     var icLgt = ic.length; 
-    var vocals = ['a', 'e', 'i','o', 'u'];
+    var vocals = ['a', 'e', 'i', 'o', 'u'];
     var bfIc = ic.charAt(icLgt - 2);
 
     //Convert to Singular
@@ -64,8 +65,6 @@ function intelIcons(name){
         ic = "antennas";
     }else if(ic == "apparatus"){
         ic = "apparatuses";
-    }else if(ic == "apendix"){
-        ic = "apendices";
     }else if(ic == "bison"){
         ic = "bison";
     }else if(ic == "buffalo"){
@@ -100,10 +99,6 @@ function intelIcons(name){
         ic = "hooves";
     }else if(ic == "hypothesis"){
         ic = "hypotheses";
-    }else if(ic == "index"){
-        ic = "indices";
-    }else if(ic == "matrix"){
-        ic = "matrices";
     }else if(ic == "means"){
         ic = "means";
     }else if(ic == "means"){
@@ -161,16 +156,42 @@ function intelIcons(name){
     }else if(ic == "aircraft"){
         ic = "aircraft";
     }
+
+    else if(ic == "fez"){
+        ic = "fezzes";
+    }
+    else if(ic == "gas"){
+        ic = "gasses";
+    }
+    else if(ic == "goose"){
+        ic = "geese";
+    }
+    else if(ic == "phenomenon"){
+        ic = "phenomena";
+    }
+    else if(ic == "criterion"){
+        ic = "criteria";
+    }
+    else if(ic == "series"){
+        ic = "series";
+    }
     //rules exeptions
-    else if(ic == "photo" || ic == "piano" || ic == "halo" || ic == "turkey" || ic == "chimney" || ic == "casino" || ic == "kangaroo" || ic == "ratio" || ic == "patio" || ic == "pistachio" || ic == "stomach" || ic == "epoch"){
+    //just add S
+    else if(ic == "photo" || ic == "piano" || ic == "halo" || ic == "turkey" || ic == "chimney" || ic == "chef" || ic == "casino" || ic == "kangaroo" || ic == "ratio" || ic == "patio" || ic == "pistachio" || ic == "stomach" || ic == "epoch"){
         ic = ic + "s";
     }
+    //ending in -o and add es
+    else if(ic == "domino" || ic == "echo" || ic == "embargo" || ic == "hero" || ic == "mosqito" || ic=="torpedo" || ic == "veto" || ic == "potato" || ic == "tomato"){
+        ic = ic + "es";
+    }
+
+
 
     //rules
     else if(ic == ""){
         ic = "Noun in Plural";
     }
-    else if( ( (ic.charAt(icLgt - 1) == "s" || ic.charAt(icLgt - 1) == "x" || ic.charAt(icLgt - 1) == "z")) && (ic.charAt(icLgt - 2) != "u" && ic.charAt(icLgt - 2) != "i") ){
+    else if( ( (ic.charAt(icLgt - 1) == "s" || ic.charAt(icLgt - 1) == "x" || ic.charAt(icLgt - 1) == "z")) && (ic.charAt(icLgt - 2) != "u" && ic.charAt(icLgt - 2) != "i") && ( (ic.charAt(icLgt - 2) != "i" && ic.charAt(icLgt - 2) != "e") && ic.charAt(icLgt - 2) != "x") ){
         ic = ic+"es";
         console.log("1");
     }
@@ -186,7 +207,7 @@ function intelIcons(name){
     else if( ic.charAt(icLgt - 1) == "f"){
         var reps = includeArray(ic.charAt(icLgt - 2), vocals);
         var preps = includeArray(ic.charAt(icLgt - 3), vocals);
-        if(reps != false || preps != false){
+        if(reps == true && preps == true){
             ic = ic + "s";
         }else{
         var rep = replaceAt(ic,icLgt -1, "v");
@@ -205,7 +226,15 @@ function intelIcons(name){
         console.log("5");
     }
     else if(ic.charAt(icLgt - 1 ) == "o"){
-        ic = ic + "es";
+        ic = ic + "s";
+        console.log("6");
+    }
+    else if(ic.charAt(icLgt - 1 ) == "o"){
+        var rep = includeArray(ic.charAt(icLgt - 2 ) == "o", vocals);
+        if(rep == true){
+            ic = ic + "s";
+        }
+        ic = ic + "s";
         console.log("6");
     }
     else if(ic.charAt(icLgt - 2 ) == "u" && ic.charAt(icLgt - 1 ) == "s"){
@@ -219,12 +248,18 @@ function intelIcons(name){
         ic = reps;
         console.log("8");
     }
-    else if(ic.charAt(icLgt - 2 ) == "o" && ic.charAt(icLgt - 1 ) == "n"){
-        var preps = replaceAt(ic,icLgt - 2, "");
-        var reps = replaceAt(preps,preps.length - 1, "a");
+    else if((ic.charAt(icLgt - 2 ) == "i" || ic.charAt(icLgt - 2 ) == "e") && ic.charAt(icLgt - 1 ) == "x"){
+        var preps = replaceAt(ic,icLgt - 2, "ice");
+        var reps = replaceAt(preps, preps.length -1, "s");
         ic = reps;
-        console.log("9");
+        console.log("7");
     }
+    // else if(ic.charAt(icLgt - 2 ) == "o" && ic.charAt(icLgt - 1 ) == "n"){
+    //     var preps = replaceAt(ic,icLgt - 2, "");
+    //     var reps = replaceAt(preps,preps.length - 1, "a");
+    //     ic = reps;
+    //     console.log("9");
+    // }
     else if(ic.charAt(icLgt - 1 ) == "m"){
         var preps = replaceAt(ic,icLgt - 2, "");
         var reps = replaceAt(preps,preps.length - 1, "a");
@@ -248,16 +283,16 @@ function intelIcons(name){
         ic = ic + "x";
         console.log("13");
     }
-    else if(ic.includes("oo") == true){
-        var rest = ic.replace("oo","ee");
-        ic = rest;
-        console.log("14");
-    }
+    // else if(ic.includes("oo") == true){
+    //     var rest = ic.replace("oo","ee");
+    //     ic = rest;
+    //     console.log("14");
+    // }
     else{
         ic = ic + "s";
     }
 
-    document.querySelector("#ls").innerHTML = ic;
+    document.querySelector(".ls").innerHTML = ic;
     
 }
 
@@ -265,38 +300,84 @@ document.querySelector("#translate").addEventListener("click", trans);
  
 function trans(){
     send();
-    var inpts = document.querySelector("#sing").value; 
+    var inpts = document.querySelector(".sing").value; 
     var lblInput = "Your noun here:";
     var convert = "Converted to:";
-    var lbl = document.querySelector("#ls").textContent; 
+    var lbl = document.querySelector(".ls").textContent; 
     var plHolder = "Your Noun in Singular";
 
     translate(inpts, {to: 'es'}).then(res => {
-    document.querySelector("#sing").value = res.text;
+    document.querySelector(".sing").value = res.text;
         }).catch(err => {
             console.error(err);
         });
 
     translate(lblInput, {to: 'es'}).then(res => {
-        document.querySelector("#lblSing").innerHTML = res.text;
+        document.querySelector(".lblSing").innerHTML = res.text;
         }).catch(err => {
             console.error(err);
         });
     translate(convert, {to: 'es'}).then(res => {
-    document.querySelector("#cs").innerHTML = res.text;
+    document.querySelector(".cs").innerHTML = res.text;
     }).catch(err => {
                 console.error(err);
     });
     translate(lbl, {to: 'es'}).then(res => {
-    document.querySelector("#ls").innerHTML = res.text;
+    document.querySelector(".ls").innerHTML = res.text;
     }).catch(err => {
      console.error(err);
         });
     translate(plHolder, {to: 'es'}).then(res => {
-        document.querySelector("#sing").placeholder = res.text;
+        document.querySelector(".sing").placeholder = res.text;
         }).catch(err => {
         console.error(err);
     });
 }
 
+document.getElementById("toSh").addEventListener("click", modals);
+document.querySelector(".sendO").addEventListener("click", close);
+document.querySelector("#closeM").addEventListener("click", closeM);
+function modals(){
+    setTimeout(() =>{
+        document.getElementById("modalShadow").style.opacity = "1";
 
+    }, 100);
+    document.getElementById("modalShadow").style.display = "block";
+}
+
+function closeM(){
+    document.getElementById("modalShadow").style.opacity = "0";
+    setTimeout(() =>{
+        document.getElementById("modalShadow").style.display = "none";
+    }, 450);
+}
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'stopapplication@gmail.com',
+    pass: 'stopapp3030'
+  }
+});
+var inputS;
+var inputT;
+
+function close(){
+    inputS = document.querySelector("#newA").value;
+    inputT = document.querySelector("#newS").value;
+    var message = "The noun "+inputS+" the plural is "+inputT+", check now!";
+var mailOptions = {
+  from: 'stopapplication@gmail.com',
+  to: 'as62971@gmail.com',
+  subject: 'Stop App require a new word or change',
+  text: message
+};
+
+    document.getElementById("modalShadow").style.opacity = "0";
+    setTimeout(() =>{
+        document.getElementById("modalShadow").style.display = "none";
+    }, 450);
+    if(inputS != "" && inputT != ""){
+        transporter.sendMail(mailOptions);
+    }   
+}

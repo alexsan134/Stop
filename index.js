@@ -11,7 +11,7 @@ function createWindow(){
         frame : true, 
         resizable: false,
         show : false,
-        icon: 'src/img/logo.icns',
+        icon: 'assets/img/logo.png',
         title : "Stop"
     });
     
